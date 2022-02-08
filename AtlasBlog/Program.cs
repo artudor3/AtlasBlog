@@ -1,12 +1,13 @@
 using AtlasBlog.Data;
 using AtlasBlog.Models;
+using AtlasBlog.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = ConnectionService.GetConnectionString(builder.Configuration);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -21,7 +22,17 @@ builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.R
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddTransient<DataService>();
+
 var app = builder.Build();
+
+//When calling a service from this middleware we need an instance of IServiceScope
+var scope = app.Services.CreateScope();
+//var dataService = scope.ServiceProvider.GetService<DataService>();
+//await dataService.SetupDbAsync();
+
+//long code vs tall (35 = 31 & 32)
+await scope.ServiceProvider.GetRequiredService<DataService>().SetupDbAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

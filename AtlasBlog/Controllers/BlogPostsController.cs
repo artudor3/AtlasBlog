@@ -49,7 +49,7 @@ namespace AtlasBlog.Controllers
         // GET: BlogPosts/Create
         public IActionResult Create()
         {
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogDescription");
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName");
             return View();
         }
 
@@ -58,15 +58,21 @@ namespace AtlasBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BlogId,Title,Abstract,Body,Created,Updated")] BlogPost blogPost)
+
+        //Bind("Id,BlogId,Title,Slug,IsDeleted,Abstract,BlogPostState,Body,Created,Updated")
+        public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,BlogPostState,Body")] BlogPost blogPost)
         {
             if (ModelState.IsValid)
             {
+
+                blogPost.Created = DateTime.UtcNow;
+
+
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogDescription", blogPost.BlogId);
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
             return View(blogPost);
         }
 
@@ -83,7 +89,7 @@ namespace AtlasBlog.Controllers
             {
                 return NotFound();
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogDescription", blogPost.BlogId);
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
             return View(blogPost);
         }
 
@@ -92,7 +98,7 @@ namespace AtlasBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Body,Created,Updated")] BlogPost blogPost)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Slug,IsDeleted,Abstract,BlogPostState,Body,Created,Updated")] BlogPost blogPost)
         {
             if (id != blogPost.Id)
             {
@@ -119,7 +125,7 @@ namespace AtlasBlog.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogDescription", blogPost.BlogId);
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
             return View(blogPost);
         }
 

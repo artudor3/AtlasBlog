@@ -18,10 +18,28 @@
             @Html.DisplayFor(model => model.Title)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Slug)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Slug)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsDeleted)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsDeleted)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Abstract)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Abstract)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BlogPostState)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BlogPostState)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Body)

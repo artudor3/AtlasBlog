@@ -13,6 +13,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Created" />
             <div class="form-group">
                 <label asp-for="BlogName" class="control-label"></label>
                 <input asp-for="BlogName" class="form-control" />
@@ -22,16 +23,6 @@
                 <label asp-for="BlogDescription" class="control-label"></label>
                 <input asp-for="BlogDescription" class="form-control" />
                 <span asp-validation-for="BlogDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Created" class="control-label"></label>
-                <input asp-for="Created" class="form-control" />
-                <span asp-validation-for="Created" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Updated" class="control-label"></label>
-                <input asp-for="Updated" class="form-control" />
-                <span asp-validation-for="Updated" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

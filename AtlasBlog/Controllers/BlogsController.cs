@@ -8,16 +8,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AtlasBlog.Data;
 using AtlasBlog.Models;
+using AtlasBlog.Services;
 
 namespace AtlasBlog.Controllers
 {
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly DataService _dataService;
 
-        public BlogsController(ApplicationDbContext context)
+        public BlogsController(ApplicationDbContext context,
+                               DataService dataService)
         {
             _context = context;
+            _dataService = dataService;
         }
 
         // GET: Blogs
@@ -89,7 +93,7 @@ namespace AtlasBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogName,BlogDescription,Created,Updated")] Blog blog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogName,BlogDescription,Created")] Blog blog)
         {
             if (id != blog.Id)
             {
@@ -100,6 +104,9 @@ namespace AtlasBlog.Controllers
             {
                 try
                 {
+
+                    blog.Created = _dataService.GetPostGresDate(blog.Created);
+                    blog.Updated = DateTime.UtcNow;
                     _context.Update(blog);
                     await _context.SaveChangesAsync();
                 }

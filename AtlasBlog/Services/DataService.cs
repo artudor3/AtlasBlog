@@ -18,5 +18,11 @@ namespace AtlasBlog.Services
             //Run the Migrations async
             await _dbContext.Database.MigrateAsync();
         }
+
+        public DateTime GetPostGresDate(DateTime datetime)
+        {
+            return DateTime.SpecifyKind(datetime, DateTimeKind.Utc);
+        }
+
     }
 }

@@ -12,7 +12,6 @@ namespace AtlasBlog.Models
         public string BlogName { get; set; } = "";
 
         [Required]
-        [Display(Name = "Blog Description")]
         [StringLength(300, ErrorMessage = "The {0} must be at most {1} and at least {2} characters long", MinimumLength = 2)]
         public string BlogDescription { get; set; } = "";
 

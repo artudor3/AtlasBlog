@@ -57,11 +57,20 @@ namespace AtlasBlog.Controllers
 
             var blogPost = await _context.BlogPosts
                 .Include(b => b.Blog)
+                .Include(c => c.Comments)
+                .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
             if (blogPost == null)
             {
                 return NotFound();
             }
+            
+           
+
+            //blogPost.Comments = await _context.Comments.Include(c => c.BlogPost)
+            //                                           .Include(c => c.Author)
+            //                                           .Where(c => c.BlogPostId == blogPost.Id)
+            //                                           .ToListAsync();
 
             return View(blogPost);
         }

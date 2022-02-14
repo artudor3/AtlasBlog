@@ -11,12 +11,21 @@ namespace AtlasBlog.Models
         public string? DisplayName { get; set; }
 
         [NotMapped]
+        public string FullName
+        {
+            get
+            {
+                return $"{LastName}, {FirstName}";
+            }
+        }
+
+        [NotMapped]
         [DataType(DataType.Upload)]
         [Display(Name = "Blog Image")]
         public IFormFile? ImageFile { get; set; }
         public byte[]? ImageData { get; set; }
         public string? ImageType { get; set; }
-
-
+        
+        public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
     }
 }

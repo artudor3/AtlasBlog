@@ -99,5 +99,6 @@ namespace AtlasBlog.Services
         {
             return DateTime.SpecifyKind(datetime, DateTimeKind.Utc);
         }
+
     }
 }

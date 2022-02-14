@@ -22,6 +22,13 @@ namespace AtlasBlog.Models
         public DateTime? Updated { get; set; }
         //public Nullable<DateTime> DateUpdated { get; set; }
 
+
+        //I want to store an image for this Blog
+        [Display(Name = "Choose Image")]
+        public byte[] ImageData { get; set; } = Array.Empty<byte>();
+        public string ImageType { get; set; } = "";
+
+
         //List of Posts as children
         public ICollection<BlogPost> BlogPosts { get; set; } = new HashSet<BlogPost>();
     }

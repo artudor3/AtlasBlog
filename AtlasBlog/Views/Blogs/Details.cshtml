@@ -1,4 +1,10 @@
-﻿@model AtlasBlog.Models.Blog
+﻿@using AtlasBlog.Services.Interfaces
+
+
+@model AtlasBlog.Models.Blog
+
+
+@inject IImageService _imageService
 
 @{
     ViewData["Title"] = "Details";
@@ -10,6 +16,14 @@
     <h4>Blog</h4>
     <hr />
     <dl class="row">
+        <dt>
+            Blog Image
+        </dt>
+        <dd>@if (Model!.ImageType != "")
+            {
+            <img class="img-fluid" src="@_imageService.ConvertByteArrayToFile(Model.ImageData, Model.ImageType)">                
+            }
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.BlogName)
         </dt>
@@ -37,6 +51,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    @if (User.IsInRole("Administrator")){<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>} |
     <a asp-action="Index">Back to List</a>
 </div>

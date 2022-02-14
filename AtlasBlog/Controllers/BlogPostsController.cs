@@ -8,36 +8,56 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AtlasBlog.Data;
 using AtlasBlog.Models;
+using AtlasBlog.Services;
+using AtlasBlog.Services.Interfaces;
 
 namespace AtlasBlog.Controllers
 {
     public class BlogPostsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly SlugService _slugService;
+        private readonly IImageService _imageService;
 
-        public BlogPostsController(ApplicationDbContext context)
+        public BlogPostsController(ApplicationDbContext context,
+                                   SlugService slugService,
+                                   IImageService imageService)
         {
             _context = context;
+            _slugService = slugService;
+            _imageService = imageService;
         }
 
+
+
         // GET: BlogPosts
+        public async Task<IActionResult> BlogChildIndex(int blogId)
+        {
+            var children = await _context.BlogPosts.Include(b => b.Blog)
+                                             .Where(b => b.BlogId == blogId)
+                                             .ToListAsync();
+            return View("Index", children);
+        }
+
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.BlogPosts.Include(b => b.Blog);
             return View(await applicationDbContext.ToListAsync());
         }
 
+
+
         // GET: BlogPosts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string slug)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(slug))
             {
                 return NotFound();
             }
 
             var blogPost = await _context.BlogPosts
                 .Include(b => b.Blog)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Slug == slug);
             if (blogPost == null)
             {
                 return NotFound();
@@ -45,6 +65,8 @@ namespace AtlasBlog.Controllers
 
             return View(blogPost);
         }
+
+
 
         // GET: BlogPosts/Create
         public IActionResult Create()
@@ -64,9 +86,25 @@ namespace AtlasBlog.Controllers
         {
             if (ModelState.IsValid)
             {
+                var slug = _slugService.UrlFriendly(blogPost.Title, 100);
+
+                //need to make sure the Slug is unique before allowing it to be stored in the DB
+                //if unique, it can be used, otherwise throw a custom error
+                var isUnique = !_context.BlogPosts.Any(b => b.Slug == slug);
+
+                if (isUnique)
+                {
+                    blogPost.Slug = slug;
+                }
+                else
+                {
+                    ModelState.AddModelError("Title", "This Title cannot be used (duplicate Slug)");
+                    ModelState.AddModelError("", "This Title cannot be used");
+                    ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
+                    return View(blogPost);
+                }
 
                 blogPost.Created = DateTime.UtcNow;
-
 
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();
@@ -75,6 +113,8 @@ namespace AtlasBlog.Controllers
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
             return View(blogPost);
         }
+
+
 
         // GET: BlogPosts/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -98,7 +138,7 @@ namespace AtlasBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,IsDeleted,Abstract,BlogPostState,Body,Created")] BlogPost blogPost)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Slug,IsDeleted,Abstract,BlogPostState,Body,Created")] BlogPost blogPost)
         {
             if (id != blogPost.Id)
             {
@@ -109,6 +149,27 @@ namespace AtlasBlog.Controllers
             {
                 try
                 {
+                    var slug = _slugService.UrlFriendly(blogPost.Title, 100);
+
+                    //need to make sure the Slug is unique before allowing it to be stored in the DB
+                    //if unique, it can be used, otherwise throw a custom error
+                    if (blogPost.Slug != slug)
+                    {
+                        var isUnique = !_context.BlogPosts.Any(b => b.Slug == slug);
+
+                        if (isUnique)
+                        {
+                            blogPost.Slug = slug;
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Title", "This Title cannot be used (duplicate Slug)");
+                            ModelState.AddModelError("", "This Title cannot be used");
+                            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
+                            return View(blogPost);
+                        }
+                    }
+
                     blogPost.Created = DateTime.SpecifyKind(blogPost.Created, DateTimeKind.Utc);
                     blogPost.Updated = DateTime.UtcNow;
                     _context.Update(blogPost);
@@ -130,6 +191,8 @@ namespace AtlasBlog.Controllers
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
             return View(blogPost);
         }
+
+
 
         // GET: BlogPosts/Delete/5
         public async Task<IActionResult> Delete(int? id)

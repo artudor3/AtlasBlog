@@ -1,53 +1,58 @@
-﻿@model IEnumerable<AtlasBlog.Models.Blog>
+﻿@using AtlasBlog.Models
+@using AtlasBlog.Services.Interfaces
+
+@model IEnumerable<AtlasBlog.Models.Blog>
+
+@inject IImageService _imageService
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
+            <th>
+                Image
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.BlogName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BlogDescription)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Updated)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BlogName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BlogDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Updated)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.ImageType != "")
+                    {
+                        <img class="img-fluid" src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)">
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BlogName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BlogDescription)
+                </td>
+                <td>
+                    @if (User.IsInRole("Administrator")){<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>}
+                     | <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    @if (User.IsInRole("Administrator")){<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

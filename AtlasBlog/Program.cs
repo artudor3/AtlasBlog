@@ -1,6 +1,7 @@
 using AtlasBlog.Data;
 using AtlasBlog.Models;
 using AtlasBlog.Services;
+using AtlasBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,8 @@ builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.R
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<DataService>();
+builder.Services.AddScoped<IImageService, BasicImageService>();
+builder.Services.AddTransient<SlugService>();
 
 var app = builder.Build();
 
@@ -55,8 +58,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "custom",
+    pattern: "BlogPosts/Details/{slug}",
+    defaults: new { controller = "BlogPosts", action = "Details" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

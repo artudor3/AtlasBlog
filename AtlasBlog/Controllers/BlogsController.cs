@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using AtlasBlog.Data;
 using AtlasBlog.Models;
 using AtlasBlog.Services;
+using AtlasBlog.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AtlasBlog.Controllers
 {
@@ -16,19 +18,26 @@ namespace AtlasBlog.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly DataService _dataService;
+        private readonly IImageService _imageService;
 
         public BlogsController(ApplicationDbContext context,
-                               DataService dataService)
+                               DataService dataService,
+                               IImageService imageService)
         {
             _context = context;
             _dataService = dataService;
+            _imageService = imageService;
         }
+
+
 
         // GET: Blogs
         public async Task<IActionResult> Index()
         {
             return View(await _context.Blogs.ToListAsync());
         }
+
+
 
         // GET: Blogs/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -48,7 +57,10 @@ namespace AtlasBlog.Controllers
             return View(blog);
         }
 
+
+
         // GET: Blogs/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -59,12 +71,20 @@ namespace AtlasBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BlogName,BlogDescription")] Blog blog)
+        public async Task<IActionResult> Create([Bind("BlogName,BlogDescription")] Blog blog, IFormFile imageFile)
         {
             if (ModelState.IsValid)
             {
                 //Specify the DateTime Kind for the incoming Created Date
                 blog.Created = DateTime.UtcNow;
+
+                if (imageFile is not null)
+                {
+                    blog.ImageData = await _imageService.ConvertFileToByteArrayAsync(imageFile);
+                    blog.ImageType = imageFile.ContentType;
+                }
+
+
                 _context.Add(blog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -72,7 +92,10 @@ namespace AtlasBlog.Controllers
             return View(blog);
         }
 
+
+
         // GET: Blogs/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -126,7 +149,10 @@ namespace AtlasBlog.Controllers
             return View(blog);
         }
 
+
+
         // GET: Blogs/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

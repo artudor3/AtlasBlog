@@ -1,4 +1,7 @@
-﻿@model AtlasBlog.Models.Blog
+﻿@using AtlasBlog.Services.Interfaces
+@model AtlasBlog.Models.Blog
+
+@inject IImageService  _imageService
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,6 +17,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Created" />
+
             <div class="form-group">
                 <label asp-for="BlogName" class="control-label"></label>
                 <input asp-for="BlogName" class="form-control" />
@@ -23,6 +27,18 @@
                 <label asp-for="BlogDescription" class="control-label"></label>
                 <input asp-for="BlogDescription" class="form-control" />
                 <span asp-validation-for="BlogDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @if (Model.ImageType != "")
+                {
+                    <img class="img-fluid img-thumbnail" style="width:100px;height:80px" src="@_imageService.ConvertByteArrayToFile(Model.ImageData, Model.ImageType)">
+                }
+                else
+                {
+                    <img class="img-fluid img-thumbnail" style="width:100px;height:100px" src="https://cdn.icon-icons.com/icons2/46/PNG/128/imgindex_9614.png">
+                }
+                <label asp-for="ImageData" class="control-label"></label>
+                <input type="file" name="ImageFile" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

@@ -11,13 +11,22 @@ namespace AtlasBlog.Models
         public string? DisplayName { get; set; }
 
         [NotMapped]
-        public string FullName
+        public string FormalName
         {
             get
             {
                 return $"{LastName}, {FirstName}";
             }
         }
+        [NotMapped]
+        public string FullName
+        {
+            get
+            {
+                return $"{FirstName}, {LastName}";
+            }
+        }
+
 
         [NotMapped]
         [DataType(DataType.Upload)]
@@ -26,6 +35,6 @@ namespace AtlasBlog.Models
         public byte[]? ImageData { get; set; }
         public string? ImageType { get; set; }
         
-        public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+
     }
 }

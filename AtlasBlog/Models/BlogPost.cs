@@ -33,7 +33,7 @@ namespace AtlasBlog.Models
         public DateTime? Updated { get; set; }
 
         //Navigation properties
-        public virtual Blog Blog { get; set; } = new();
+        public virtual Blog? Blog { get; set; } = new();
         public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
     }
 }

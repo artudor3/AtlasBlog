@@ -34,9 +34,6 @@ namespace AtlasBlog.Services
 
         }
 
-
-
-
         private async Task SeedRolesAsync()
         {
             //Alternate

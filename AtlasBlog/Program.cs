@@ -4,6 +4,7 @@ using AtlasBlog.Services;
 using AtlasBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,11 +32,11 @@ var app = builder.Build();
 
 //When calling a service from this middleware we need an instance of IServiceScope
 var scope = app.Services.CreateScope();
-//var dataService = scope.ServiceProvider.GetService<DataService>();
-//await dataService.SetupDbAsync();
+var dataService = scope.ServiceProvider.GetRequiredService<DataService>();
+await dataService.SetupDbAsync();
 
-//long code vs tall (35 = 31 & 32)
-await scope.ServiceProvider.GetRequiredService<DataService>().SetupDbAsync();
+//long code vs tall (36 = 35 & 36)
+//await scope.ServiceProvider.GetRequiredService<DataService>().SetupDbAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -59,8 +60,9 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "custom",
-    pattern: "BlogPosts/Details/{slug}",
-    defaults: new { controller = "BlogPosts", action = "Details" });
+    pattern: "PostDetail/{slug}",
+    defaults: new { controller = "BlogPosts", action = "Details" }
+);
 
 app.MapControllerRoute(
     name: "default",

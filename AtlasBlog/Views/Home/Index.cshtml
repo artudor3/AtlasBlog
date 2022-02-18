@@ -1,4 +1,8 @@
-﻿@model IEnumerable<AtlasBlog.Models.Blog>
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+
+@using AtlasBlog.Models
+@model IPagedList<AtlasBlog.Models.Blog>
 @{
     ViewData["Title"] = "Blog Home";
 }
@@ -48,6 +52,9 @@
                         </div>
                     </div>
                 }
+
+
+
                 <!-- Pagination
                 <nav aria-label="Pagination">
                     <hr class="my-0" />
@@ -103,3 +110,4 @@
             </div>
         </div>
     </div>
+</div>

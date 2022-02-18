@@ -212,7 +212,19 @@ namespace AtlasBlog.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("UpdatedDate")
+                    b.Property<string>("ModeratedBody")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ModeratedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ModerationReason")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModeratorId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -220,6 +232,8 @@ namespace AtlasBlog.Data.Migrations
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("BlogPostId");
+
+                    b.HasIndex("ModeratorId");
 
                     b.ToTable("Comments");
                 });
@@ -370,7 +384,7 @@ namespace AtlasBlog.Data.Migrations
             modelBuilder.Entity("AtlasBlog.Models.Comment", b =>
                 {
                     b.HasOne("AtlasBlog.Models.BlogUser", "Author")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("AuthorId");
 
                     b.HasOne("AtlasBlog.Models.BlogPost", "BlogPost")
@@ -379,9 +393,15 @@ namespace AtlasBlog.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AtlasBlog.Models.BlogUser", "Moderator")
+                        .WithMany()
+                        .HasForeignKey("ModeratorId");
+
                     b.Navigation("Author");
 
                     b.Navigation("BlogPost");
+
+                    b.Navigation("Moderator");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -441,11 +461,6 @@ namespace AtlasBlog.Data.Migrations
                 });
 
             modelBuilder.Entity("AtlasBlog.Models.BlogPost", b =>
-                {
-                    b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("AtlasBlog.Models.BlogUser", b =>
                 {
                     b.Navigation("Comments");
                 });

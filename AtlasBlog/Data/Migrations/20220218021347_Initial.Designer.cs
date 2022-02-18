@@ -12,14 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AtlasBlog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220208165143_BlogPost")]
-    partial class BlogPost
+    [Migration("20220218021347_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -45,6 +45,14 @@ namespace AtlasBlog.Data.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("ImageType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("timestamp with time zone");
 
@@ -69,6 +77,9 @@ namespace AtlasBlog.Data.Migrations
                     b.Property<int>("BlogId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("BlogPostState")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("text");
@@ -76,19 +87,26 @@ namespace AtlasBlog.Data.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime>("Updated")
+                    b.Property<DateTime?>("Updated")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BlogId");
 
-                    b.ToTable("BlogPost");
+                    b.ToTable("BlogPosts");
                 });
 
             modelBuilder.Entity("AtlasBlog.Models.BlogUser", b =>
@@ -115,6 +133,12 @@ namespace AtlasBlog.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("ImageType")
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
@@ -164,6 +188,56 @@ namespace AtlasBlog.Data.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("AtlasBlog.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("BlogPostId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CommentBody")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ModeratedBody")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ModeratedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ModerationReason")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModeratorId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("BlogPostId");
+
+                    b.HasIndex("ModeratorId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -309,6 +383,29 @@ namespace AtlasBlog.Data.Migrations
                     b.Navigation("Blog");
                 });
 
+            modelBuilder.Entity("AtlasBlog.Models.Comment", b =>
+                {
+                    b.HasOne("AtlasBlog.Models.BlogUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("AtlasBlog.Models.BlogPost", "BlogPost")
+                        .WithMany("Comments")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AtlasBlog.Models.BlogUser", "Moderator")
+                        .WithMany()
+                        .HasForeignKey("ModeratorId");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("BlogPost");
+
+                    b.Navigation("Moderator");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -363,6 +460,11 @@ namespace AtlasBlog.Data.Migrations
             modelBuilder.Entity("AtlasBlog.Models.Blog", b =>
                 {
                     b.Navigation("BlogPosts");
+                });
+
+            modelBuilder.Entity("AtlasBlog.Models.BlogPost", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

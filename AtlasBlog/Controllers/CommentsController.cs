@@ -124,6 +124,17 @@ namespace AtlasBlog.Controllers
             return View(comment);
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Moderate(int id, [Bind("Id,ModeratedBody, ModerationReason")] Comment comment)
+        //{
+        //    if (id != comment.Id)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //}
+
         // GET: Comments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

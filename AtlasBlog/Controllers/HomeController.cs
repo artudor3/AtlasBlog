@@ -2,6 +2,7 @@
 using AtlasBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace AtlasBlog.Controllers
 {
@@ -16,16 +17,18 @@ namespace AtlasBlog.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? pageNum)
         {
-            var blogs = _context.Blogs.ToList();
+            //pageNum = pageNum ?? 1;
+            pageNum ??= 1;
+
+            //var blogs = _context.Blogs.ToList();
+            //var blogs = _context.Blogs.ToPagedList((int)pageNum, 5);
+            var blogs = await _context.Blogs.OrderByDescending(b => b.Created)
+                                            .ToPagedListAsync(pageNum, 5);
             return View(blogs);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

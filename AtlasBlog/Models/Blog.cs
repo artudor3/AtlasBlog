@@ -9,11 +9,11 @@ namespace AtlasBlog.Models
         [Required]
         [Display(Name = "Blog Name")]
         [StringLength(100, ErrorMessage = "The {0} must be at most {1} and at least {2} characters long", MinimumLength =2)]
-        public string BlogName { get; set; } = "blog";
+        public string BlogName { get; set; } = "";
 
         [Required]
         [StringLength(300, ErrorMessage = "The {0} must be at most {1} and at least {2} characters long", MinimumLength = 2)]
-        public string BlogDescription { get; set; } = "desc";
+        public string BlogDescription { get; set; } = "";
 
         [DataType(DataType.Date)] 
         public DateTime Created { get; set; }

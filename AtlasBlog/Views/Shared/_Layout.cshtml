@@ -17,7 +17,7 @@
 
     <!-- Font Awesome Kit -->
     <script src="https://kit.fontawesome.com/8234f8cabf.js" crossorigin="anonymous"></script>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
     <!-- Core theme CSS (includes Bootstrap)-->
@@ -36,7 +36,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                 <img src="~/img/ArtBrandW.png" height="30" class="d-inline-block align-text-top">
-                 Blog
+                Blog
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -53,9 +53,22 @@
         </div>
     </nav>
 
-    <main role="main" class="pb-3">
+
+    <header class="py-5 bg-light border-bottom mb-4">
+        <div class="container">
+            <div class="text-center my-5">
+                <h1 class="fw-bolder">Welcome to Blog Home!</h1>
+            </div>
+            <form asp-action="SearchIndex" asp-controller="BlogPosts">
+                <input class="form-control" type="text" name="searchTerm" />
+                <button class="btn btn-sm btn-dark btn-outline-primary w-100">SEARCH</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="container">
         @RenderBody()
-    </main>
+    </div>
 
 
     <!-- Footer
@@ -95,21 +108,26 @@
         </div>
     </footer>-->
 
-    
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Summernote -->
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+    <!-- CKEditor4 -->
+    <script src="https://cdn.ckeditor.com/4.4.5.1/standard/ckeditor.js"></script>
+
+    <!-- CKEditor5 
+    <script src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>-->
+
     <!-- Core theme JS-->
     <script src="~/js/scripts.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
+    
+    <!-- CKEditor to replace textareas with id="Body"-->
     <script>
-        $(document).ready(function() {
-        $('#Body').summernote();
-        });
+        CKEDITOR.replace( 'Body' );
     </script>
+
 </body>
 </html>

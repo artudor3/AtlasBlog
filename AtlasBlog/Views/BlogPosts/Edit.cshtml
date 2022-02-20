@@ -14,7 +14,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <input asp-for="Slug" />
+            <input type="hidden" asp-for="Slug" />
             <input type="hidden" asp-for="Created" />
 
             <div class="form-group">

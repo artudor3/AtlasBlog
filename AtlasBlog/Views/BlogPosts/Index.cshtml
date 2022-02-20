@@ -18,8 +18,8 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
+                Created
+            </th> 
             <th>
                 @Html.DisplayNameFor(model => model.Abstract)
             </th>
@@ -38,9 +38,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>    
+             <td>
+                @item.Created.ToString("MMM dd, yyyy")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Abstract)

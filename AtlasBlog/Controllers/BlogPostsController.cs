@@ -7,6 +7,7 @@ using AtlasBlog.Models;
 using AtlasBlog.Services;
 using AtlasBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using X.PagedList;
 
 namespace AtlasBlog.Controllers
 {
@@ -15,14 +16,17 @@ namespace AtlasBlog.Controllers
         private readonly ApplicationDbContext _context;
         private readonly SlugService _slugService;
         private readonly IImageService _imageService;
+        private readonly SearchService _searchService;
 
         public BlogPostsController(ApplicationDbContext context,
                                    SlugService slugService,
-                                   IImageService imageService)
+                                   IImageService imageService, 
+                                   SearchService searchService)
         {
             _context = context;
             _slugService = slugService;
             _imageService = imageService;
+            _searchService = searchService;
         }
 
 
@@ -42,6 +46,20 @@ namespace AtlasBlog.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> SearchIndex(int? pageNum, string searchTerm)
+        {
+            pageNum ??= 1;
+            var pageSize = 5;
+
+            //Search Service goes here
+            var postResults = _searchService.TermSearch(searchTerm);
+            var pagedPosts = await postResults.ToPagedListAsync(pageNum, pageSize);
+
+            ViewData["SearchTerm"] = searchTerm;
+            return View(pagedPosts);
+
+        }
+
 
 
         // GET: BlogPosts/Details/5
@@ -57,17 +75,12 @@ namespace AtlasBlog.Controllers
                 .Include(c => c.Comments)
                 .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
+
             if (blogPost == null)
             {
                 return NotFound();
             }
             
-           
-
-            //blogPost.Comments = await _context.Comments.Include(c => c.BlogPost)
-            //                                           .Include(c => c.Author)
-            //                                           .Where(c => c.BlogPostId == blogPost.Id)
-            //                                           .ToListAsync();
 
             return View(blogPost);
         }
@@ -87,8 +100,6 @@ namespace AtlasBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        //Bind("Id,BlogId,Title,Slug,IsDeleted,Abstract,BlogPostState,Body,Created,Updated")
         public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,BlogPostState,Body")] BlogPost blogPost)
         {
             if (ModelState.IsValid)

@@ -54,7 +54,7 @@
             @Html.DisplayNameFor(model => model.Body)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Body)
+            @Html.Raw(Model!.Body)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Created)
@@ -85,7 +85,7 @@
         <input type="hidden" name="BlogPostId" value=@Model!.Id>
 
         <textarea class="form-control" name="CommentBody" rows=10 placeholder="Add Comment"></textarea>
-        <button class="btn btn-dark">SUBMIT</button>
+        <button class="btn btn-dark btn-outline-light mt-2">SUBMIT</button>
     </form>
 }
 else
@@ -95,51 +95,54 @@ else
 
 <hr />
 
-<div class="container" id="CommentSection">
-    <h4>Comments</h4>
-    @foreach (var comment in Model!.Comments.OrderByDescending(c => c.CreatedDate))
+<h4>Comments</h4>
+<div class="row" id="CommentSection">
+    @foreach (var comment in Model!.Comments.OrderByDescending(c => c.UpdatedDate))
     {
-        <div class="card text-white bg-dark mb-3 w-100">
-            <div class="card-header">
-                <span class="float-start">@comment.Author!.FullName - @comment.Author</span>
-                <span class="float-end">
-                    Created: @comment.CreatedDate.ToString("MMM dd, yyyy")
-                </span>
-            </div>
-            <div class="card-body">
-                <p class="card-text">@comment.CommentBody</p>
-            </div>
-            @* THIS IS FOR THE COMMENT AUTHOR *@
-            @if (comment.ModeratedDate is null && comment.AuthorId == _userManager.GetUserId(User))
-            {
-                <div class="footer">
-                    <div class="row row-cols-1 row-cols-md-2 g-2">
-                        <div class="col">
-                            <button class="btn btn-dark btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#editCommentModal">EDIT</button>
-                        </div>
-                        <div class="col">
-                            @* SweetAlert Window *@
-                            <a asp-action="Delete" asp-controller="Comments" asp-route-id="@comment.Id" class="btn btn-dark w-100">Delete</a>
-                        </div>
-                    </div>
+        <div class="col-12">
+            <div class="targetParent card text-white bg-dark p-1 mb-3 w-100">
+                <div class="card-header border-light">
+                    <span class="float-start">@comment.Author!.FullName - @comment.Author</span>
+                    <span class="float-end">
+                        Created: @comment.CreatedDate.ToString("MMM dd, yyyy")
+                    </span>
                 </div>
-            }
+                <div class="targetChild card-body">
+                    <p class="card-text">@comment.CommentBody</p>
+                </div>
 
-            @* THIS IS FOR THE COMMENT MODERATOR *@
-            @if (User.IsInRole("Moderator"))
-            {
-                <div class="footer">
-                    <div class="row row-cols-1 row-cols-md-2 g-2">
-                        <div class="col">
-                            <button class="btn btn-dark btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#moderateCommentModal">EDIT</button>
+                @* THIS IS FOR THE COMMENT AUTHOR *@
+                @if (comment.ModeratedDate is null && comment.AuthorId == _userManager.GetUserId(User))
+                {
+                    <div class="footer ps-3">
+                        <div class="row row-cols-1 row-cols-md-2 g-2">
+                            <div class="col">
+                                <button class="btnModal btn btn-dark btn-outline-light btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#editCommentModal">EDIT</button>
+                            </div>
+                            <div class="col">
+                                @* SweetAlert Window *@
+                                <a asp-action="Delete" asp-controller="Comments" asp-route-id="@comment.Id" class="btn btn-dark btn-outline-light btn-sm w-100">DELETE</a>
+                            </div>
                         </div>
-                        @*<div class="col">
-                             SweetAlert Window 
-                            <a asp-action="Delete" asp-controller="Comments" asp-route-id="@comment.Id" class="btn btn-dark w-100">Delete</a>
-                        </div>*@
                     </div>
-                </div>
-            }
+                }
+
+                @* THIS IS FOR THE COMMENT MODERATOR *@
+                @if (User.IsInRole("Moderator"))
+                {
+                    <div class="footer">
+                        <div class="row row-cols-1 row-cols-md-2 g-2">
+                            <div class="col">
+                                <button class="btn btn-dark btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#moderateCommentModal">EDIT</button>
+                            </div>
+                            @*<div class="col">
+                                SweetAlert Window
+                                <a asp-action="Delete" asp-controller="Comments" asp-route-id="@comment.Id" class="btn btn-dark w-100">Delete</a>
+                                </div>*@
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     }
 </div>
@@ -149,78 +152,82 @@ else
 @* ------ MODAL SECTION ------ *@
 
 @* EDIT COMMENT MODAL *@
-<div class="modal fade" id="editCommentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form asp-action="Edit" asp-controller="Comments">
-            <input hidden name="Id" id="modalCommentId" />
-            <div class="form-group">
-            <textarea name="CommentBody" id="modalCommentBody"></textarea>
+<div class="modal fade" id="editCommentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel1">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="form-group">
-            <button class="btn btn-sm btn-warning btn-outline-dark w-100 fw-bold">EDIT</button>
+            <div class="modal-body">
+                <form asp-action="Edit" asp-controller="Comments">
+                    <input type="hidden" name="Id" id="modalCommentId" />
+                    <input type="hidden" asp-for="Slug" />
+
+                    <div class="form-group">
+                        <label class="control-label">Comment</label>
+                        <textarea class="form-control" rows=10 name="CommentBody" id="modalCommentBody"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-sm btn-dark btn-outline-light w-100 fw-bold">EDIT</button>
+                    </div>
+                </form>
             </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-dark btn-outline-light-dark fw-bold" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 @* MODERATE COMMENT MODAL *@
-<div class="modal fade" id="editCommentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form asp-action="Edit" asp-controller="Comments">
-            <input hidden name="Id" id="modalCommentId" />
-            <div class="form-group">
-            <textarea name="CommentBody" id="modalCommentBody"></textarea>
+<div class="modal fade" id="moderateCommentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel2">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="form-group">
-            <button class="btn btn-sm btn-warning btn-outline-dark w-100 fw-bold">EDIT</button>
+            <div class="modal-body">
+                <form asp-action="Edit" asp-controller="Comments">
+                    <input hidden name="Id" id="modalCommentId" />
+                    <div class="form-group">
+                        <textarea name="CommentBody" id="modalCommentBody"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-sm btn-warning btn-outline-dark w-100 fw-bold">EDIT</button>
+                    </div>
+                </form>
             </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 
 @section Scripts {
-    <script>
-        //Event handler for modal edit button
-        document.querySelectorAll("button.btnModal").forEach(btn => {
-            btn.addEventListener("click", function(){
-                //1. Get the commentID into the modal
-                document.getElementById("modalCommentId") = this.getAttribute("data-commentId")
 
-                //2. Get the commentBody in to the modal
-                /*document.getElementById("modalCommentBody") = this.closest("div.targetParent")
-                                                                  .find("div.targetChild")*/
 
+<script>
+    //Event handler for modal edit button
+    document.querySelectorAll("button.btnModal").forEach(btn => {
+             btn.addEventListener("click", function(){
+
+                //Thing 1: Get the Id of the comment into the Modal
+                document.getElementById('modalCommentId').value = this.getAttribute('data-commentId');
+
+                //Thing 2: Get the CommentBody into the modal
                 let parent = this.closest("div.targetParent");
-                let child = parent.querySelector("div.targetChild h5");
-                document.getElementById("modalCommentBody").innerText
-            });
+                let child = parent.querySelector("div.targetChild p");
+                document.getElementById('modalCommentBody').innerText = child.innerText;
+
         });
+    });
 
 
-    </script>
+</script>
 }

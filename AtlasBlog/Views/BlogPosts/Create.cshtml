@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-8">
-        <form asp-action="Create">
+        <form id="frmCreate" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="BlogId" class="control-label"></label>
@@ -34,8 +34,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Body" class="control-label"></label>
-                <textarea asp-for="Body" class="form-control" rows="10"></textarea>
+                <input type="hidden" asp-for="Body"/>
+                <div id="editor"></div>
                 <span asp-validation-for="Body" class="text-danger"></span>
+            </div>
+            <div class="form-group m-2">
+                <label>CKEditor</label>
+                <textarea id="Body2" name="Body2" class="form-control" rows="10"></textarea>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -49,8 +54,9 @@
 </div>
 
 @section Scripts {
-    @{
-    await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    
-}
+    <script>    
+        document.getElementById('frmCreate').addEventListener("submit", function() {
+            document.getElementById('Body').value = quill.container.firstChild.innerHTML;           
+        });
+    </script>
 }

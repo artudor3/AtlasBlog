@@ -70,29 +70,29 @@ namespace AtlasBlog.Controllers
         }
 
         // GET: Comments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var comment = await _context.Comments.FindAsync(id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Abstract", comment.BlogPostId);
-            return View(comment);
-        }
+        //    var comment = await _context.Comments.FindAsync(id);
+        //    if (comment == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
+        //    ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Abstract", comment.BlogPostId);
+        //    return View(comment);
+        //}
 
         // POST: Comments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogPostId,AuthorId,IsDeleted,CommentBody,CreatedDate,UpdatedDate")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CommentBody")] Comment comment)
         {
             if (id != comment.Id)
             {

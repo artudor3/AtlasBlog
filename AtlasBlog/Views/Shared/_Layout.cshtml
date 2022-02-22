@@ -130,14 +130,14 @@
 
     <!-- CKEditor to replace textareas with id="Body"-->
     <script>
-        CKEDITOR.replace( 'Body2' );
+        CKEDITOR.replace( 'Body' );
     </script>
-    <!-- Initialize Quill editor -->
+    <!-- Initialize Quill editor 
     <script>
         var quill = new Quill('#editor', {
           theme: 'snow'
         });
-    </script>
+    </script>-->
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

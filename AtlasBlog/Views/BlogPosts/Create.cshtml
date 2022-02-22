@@ -43,6 +43,11 @@
                 <textarea id="Body2" name="Body2" class="form-control" rows="10"></textarea>
             </div>
             <div class="form-group">
+                <label for="TagIds" class="control-label">Tag(s)</label>
+                @*@Html.ListBox("TagIds")*@
+                <select id="TagIds" name="TagIds" class="form-control" asp-items="ViewBag.TagIds" multiple></select>                  
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

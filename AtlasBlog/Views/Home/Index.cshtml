@@ -56,7 +56,7 @@
                             <img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." />
                         </a>
                         <div class="card-body">
-                            <div class="small text-muted">@blog.Created.ToString("MMM dd,yyyy")</div>
+                            <div class="small text-muted">@blog.Created.ToString("MMM dd, yyyy")</div>
                             <h2 class="card-title h4">@blog.BlogName</h2>
                             <p class="card-text">@blog.BlogDescription</p>
                             <a class="btn btn-primary" asp-action="BlogChildIndex" asp-controller="BlogPosts" asp-route-blogId="@blog.Id">Read more →</a>

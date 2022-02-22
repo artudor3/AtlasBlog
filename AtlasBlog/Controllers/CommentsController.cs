@@ -90,9 +90,10 @@ namespace AtlasBlog.Controllers
         // POST: Comments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CommentBody")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CommentBody")] Comment comment, string slug)
         {
             if (id != comment.Id)
             {
@@ -103,7 +104,13 @@ namespace AtlasBlog.Controllers
             {
                 try
                 {
-                    _context.Update(comment);
+                    var commentSnapShot = await _context.Comments.FindAsync(comment.Id);
+                    if (commentSnapShot == null)
+                    {
+                        return NotFound();
+                    }
+                    commentSnapShot.CommentBody = comment.CommentBody;
+                    commentSnapShot.UpdatedDate = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -117,10 +124,12 @@ namespace AtlasBlog.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "BlogPosts", new { slug }, "CommentSection");
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Abstract", comment.BlogPostId);
+
+
+            //ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
+            //ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Abstract", comment.BlogPostId);
             return View(comment);
         }
 

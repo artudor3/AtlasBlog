@@ -195,7 +195,6 @@
 </div>
 
 <h4>Comments</h4>
-<hr />
 @if (User.Identity!.IsAuthenticated)
 {
     //Present a simple form for collecting the comment
@@ -204,7 +203,7 @@
         <input type="hidden" name="BlogPostId" value=@Model!.Id>
 
         <textarea class="form-control" name="CommentBody" rows=10 placeholder="Add Comment"></textarea>
-        <button class="btn btn-dark btn-outline-light mt-2">SUBMIT</button>
+        <button class="btn btn-dark btn-outline-light my-2">SUBMIT</button>
     </form>
 }
 else
@@ -212,6 +211,7 @@ else
     <a class="nav-link fw-bold" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details","BlogPosts", new {slug = Model.Slug})">Login to add a comment</a>
 }
 
+<hr />
 
 <div class="row" id="CommentSection">
     @foreach (var comment in Model!.Comments.OrderByDescending(c => c.UpdatedDate))

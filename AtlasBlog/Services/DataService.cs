@@ -10,15 +10,17 @@ namespace AtlasBlog.Services
         //Calling a method or an instruction that executes the migration
         readonly ApplicationDbContext _dbContext;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<BlogUser> _userManager;
+        private readonly UserManager<BlogUser> _userManager; 
+        private readonly IConfiguration _appSettings;
 
         public DataService(ApplicationDbContext dbContext,
                            RoleManager<IdentityRole> roleManager,
-                           UserManager<BlogUser> userManager)
+                           UserManager<BlogUser> userManager, IConfiguration appSettings)
         {
             _dbContext = dbContext;
             _roleManager = roleManager;
             _userManager = userManager;
+            _appSettings = appSettings;
         }
 
         public async Task SetupDbAsync()
@@ -64,7 +66,7 @@ namespace AtlasBlog.Services
                 var newUser = await _userManager.FindByEmailAsync(user.Email);
                 if (newUser is null)
                 {
-                    await _userManager.CreateAsync(user, "Abc&123!");
+                    await _userManager.CreateAsync(user, _appSettings["DataService:AdminPassword"]);
                     await _userManager.AddToRoleAsync(user, "Administrator");
                 }
 
@@ -82,7 +84,7 @@ namespace AtlasBlog.Services
                 newUser = await _userManager.FindByEmailAsync(user.Email);
                 if (newUser is null)
                 {
-                    await _userManager.CreateAsync(user, "Abc&123!");
+                    await _userManager.CreateAsync(user, _appSettings["DataService:ModPassword"]);
                     await _userManager.AddToRoleAsync(user, "Moderator");
                 }
             }

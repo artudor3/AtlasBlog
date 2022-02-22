@@ -3,6 +3,7 @@ using AtlasBlog.Models;
 using AtlasBlog.Services;
 using AtlasBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,6 +29,7 @@ builder.Services.AddTransient<DataService>();
 builder.Services.AddScoped<IImageService, BasicImageService>();
 builder.Services.AddTransient<SlugService>();
 builder.Services.AddTransient<SearchService>();
+builder.Services.AddTransient<IEmailSender, BasicEmailService>();
 
 var app = builder.Build();
 

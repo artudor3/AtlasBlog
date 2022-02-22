@@ -69,28 +69,7 @@ namespace AtlasBlog.Controllers
             return RedirectToAction("Details","BlogPosts",new { slug },"CommentSection");
         }
 
-        // GET: Comments/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var comment = await _context.Comments.FindAsync(id);
-        //    if (comment == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-        //    ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Abstract", comment.BlogPostId);
-        //    return View(comment);
-        //}
-
-        // POST: Comments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-
+        // POST: Comments/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CommentBody")] Comment comment, string slug)
@@ -132,17 +111,50 @@ namespace AtlasBlog.Controllers
             //ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Abstract", comment.BlogPostId);
             return View(comment);
         }
+                
+        // POST: Comments/Moderate
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Moderate(int id, [Bind("Id,ModeratedBody,ModerationReason")] Comment comment)
+        {
+            if (id != comment.Id)
+            {
+                return NotFound();
+            }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Moderate(int id, [Bind("Id,ModeratedBody, ModerationReason")] Comment comment)
-        //{
-        //    if (id != comment.Id)
-        //    {
-        //        return NotFound();
-        //    }
+            Comment commentSnapShot = new();
+            try
+            {
+                //var commentSnapShot = await _context.Comments.FindAsync(comment.Id);
+                commentSnapShot = await _context.Comments
+                                                    .Include(c => c.BlogPost)
+                                                    .FirstOrDefaultAsync(c => c.Id == comment.Id);
 
-        //}
+                if (commentSnapShot == null)
+                {
+                    return NotFound();
+                }
+
+                commentSnapShot.ModeratedDate = DateTime.UtcNow;
+                commentSnapShot.ModeratedBody = comment.ModeratedBody;
+                commentSnapShot.ModerationReason = comment.ModerationReason;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CommentExists(comment.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction("Details", "BlogPosts", new { slug = commentSnapShot.BlogPost.Slug }, "CommentSection");
+        }
 
         // GET: Comments/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -169,10 +181,13 @@ namespace AtlasBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments
+                                        .Include(c => c.BlogPost)
+                                        .FirstOrDefaultAsync(c => c.Id == id);
+
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "BlogPosts", new { slug = comment.BlogPost.Slug }, "CommentSection");
         }
 
         private bool CommentExists(int id)

@@ -9,118 +9,118 @@
 
 
 <!-- Page content-->
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-lg-8">
-                    <!-- Post content-->
-                    <article>
-                        <!-- Post header-->
-                        <header class="mb-4">
-                            <!-- Post title-->
-                            <h1 class="fw-bolder mb-1">@Html.DisplayFor(model => model.Title)</h1>
-                            <!-- Post meta content-->
-                            <div class="text-muted fst-italic mb-2">Posted on @Model!.Created.ToString("MMMM dd, yyyy") by Start Bootstrap</div>
-                            <!-- Post categories-->
-                            <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
-                            <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
-                        </header>
-                        <!-- Preview image figure-->
-                        <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
-                        <!-- Post content-->
-                        <section class="mb-5">
-                            <p class="fs-5 mb-4">Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.</p>
-                            <p class="fs-5 mb-4">The universe is large and old, and the ingredients for life as we know it are everywhere, so there's no reason to think that Earth would be unique in that regard. Whether of not the life became intelligent is a different question, and we'll see if we find that.</p>
-                            <p class="fs-5 mb-4">If you get asteroids about a kilometer in size, those are large enough and carry enough energy into our system to disrupt transportation, communication, the food chains, and that can be a really bad day on Earth.</p>
-                            <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
-                            <p class="fs-5 mb-4">For me, the most fascinating interface is Twitter. I have odd cosmic thoughts every day and I realized I could hold them to myself or share them with people who might be interested.</p>
-                            <p class="fs-5 mb-4">Venus has a runaway greenhouse effect. I kind of want to know what happened there because we're twirling knobs here on Earth without knowing the consequences of it. Mars once had running water. It's bone dry today. Something bad happened there as well.</p>
-                        </section>
-                    </article>
-                    <!-- Comments section-->
-                    <section class="mb-5">
-                        <div class="card bg-light">
-                            <div class="card-body">
-                                <!-- Comment form-->
-                                <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
-                                <!-- Comment with nested comments-->
-                                <div class="d-flex mb-4">
-                                    <!-- Parent comment-->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 class="fw-bolder mb-1">@Html.DisplayFor(model => model.Title)</h1>
+                    <!-- Post meta content-->
+                    <div class="text-muted fst-italic mb-2">Posted on @Model!.Created.ToString("MMMM dd, yyyy") by Start Bootstrap</div>
+                    <!-- Post categories-->
+                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
+                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
+                </header>
+                <!-- Preview image figure-->
+                <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
+                <!-- Post content-->
+                <section class="mb-5">
+                    <p class="fs-5 mb-4">Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.</p>
+                    <p class="fs-5 mb-4">The universe is large and old, and the ingredients for life as we know it are everywhere, so there's no reason to think that Earth would be unique in that regard. Whether of not the life became intelligent is a different question, and we'll see if we find that.</p>
+                    <p class="fs-5 mb-4">If you get asteroids about a kilometer in size, those are large enough and carry enough energy into our system to disrupt transportation, communication, the food chains, and that can be a really bad day on Earth.</p>
+                    <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
+                    <p class="fs-5 mb-4">For me, the most fascinating interface is Twitter. I have odd cosmic thoughts every day and I realized I could hold them to myself or share them with people who might be interested.</p>
+                    <p class="fs-5 mb-4">Venus has a runaway greenhouse effect. I kind of want to know what happened there because we're twirling knobs here on Earth without knowing the consequences of it. Mars once had running water. It's bone dry today. Something bad happened there as well.</p>
+                </section>
+            </article>
+            <!-- Comments section-->
+            <section class="mb-5">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <!-- Comment form-->
+                        <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
+                        <!-- Comment with nested comments-->
+                        <div class="d-flex mb-4">
+                            <!-- Parent comment-->
+                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                            <div class="ms-3">
+                                <div class="fw-bold">Commenter Name</div>
+                                If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
+                                <!-- Child comment 1-->
+                                <div class="d-flex mt-4">
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                                     <div class="ms-3">
                                         <div class="fw-bold">Commenter Name</div>
-                                        If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                                        <!-- Child comment 1-->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                            <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
-                                                And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
-                                            </div>
-                                        </div>
-                                        <!-- Child comment 2-->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                            <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
-                                                When you put money directly to a problem, it makes a good headline.
-                                            </div>
-                                        </div>
+                                        And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
                                     </div>
                                 </div>
-                                <!-- Single comment-->
-                                <div class="d-flex">
+                                <!-- Child comment 2-->
+                                <div class="d-flex mt-4">
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                                     <div class="ms-3">
                                         <div class="fw-bold">Commenter Name</div>
-                                        When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
+                                        When you put money directly to a problem, it makes a good headline.
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                        <!-- Single comment-->
+                        <div class="d-flex">
+                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                            <div class="ms-3">
+                                <div class="fw-bold">Commenter Name</div>
+                                When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- Side widgets-->
-                <div class="col-lg-4">
-                    <!-- Search widget-->
-                    <div class="card mb-4">
-                        <div class="card-header bg-dark text-light">Search</div>
-                        <div class="card-body">
-                            <div class="input-group">
-                                <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                                <button class="btn btn-primary" id="button-search" type="button">Go!</button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Categories widget-->
-                    <div class="card mb-4">
-                        <div class="card-header bg-dark text-light">Categories</div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="#!">Web Design</a></li>
-                                        <li><a href="#!">HTML</a></li>
-                                        <li><a href="#!">Freebies</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="#!">JavaScript</a></li>
-                                        <li><a href="#!">CSS</a></li>
-                                        <li><a href="#!">Tutorials</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Side widget-->
-                    <div class="card mb-4">
-                        <div class="card-header bg-dark text-light">Side Widget</div>
-                        <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
+            </section>
+        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-4">
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-light">Search</div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                        <button class="btn btn-primary" id="button-search" type="button">Go!</button>
                     </div>
                 </div>
             </div>
+            <!-- Categories widget-->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-light">Categories</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">Web Design</a></li>
+                                <li><a href="#!">HTML</a></li>
+                                <li><a href="#!">Freebies</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">JavaScript</a></li>
+                                <li><a href="#!">CSS</a></li>
+                                <li><a href="#!">Tutorials</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Side widget-->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-light">Side Widget</div>
+                <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
+            </div>
         </div>
+    </div>
+</div>
 
 
 
@@ -218,14 +218,35 @@ else
     {
         <div class="col-12">
             <div class="targetParent card text-white bg-dark p-1 mb-3 w-100">
+
                 <div class="card-header border-light">
-                    <span class="float-start">@comment.Author!.FullName - @comment.Author</span>
-                    <span class="float-end">
-                        Created: @comment.CreatedDate.ToString("MMM dd, yyyy")
+                    <span class="float-start">
+                        @comment.Author!.FullName - @comment.Author
                     </span>
+                    @if (comment.ModeratedDate is null)
+                    {
+                        <span class="float-end">
+                            Created: @comment.CreatedDate.ToString("MMM dd, yyyy")
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="float-end text-danger fst-italic">
+                            Moderated on: @comment.ModeratedDate?.ToString("MMM dd, yyyy")
+                        </span>
+                    }
                 </div>
+
                 <div class="targetChild card-body">
-                    <p class="card-text">@comment.CommentBody</p>
+                    @if (comment.ModeratedDate is null)
+                    {
+                        <p class="card-text">@comment.CommentBody</p>
+                    }
+                    else
+                    {
+                        <h6 class="text-danger fst-italic">Moderation Reason: @comment.ModerationReason</h6>
+                        <h5 class="card-title">@comment.ModeratedBody <span class="fst-italic text-muted ms-2">(modified...)</span></h5>
+                    }
                 </div>
 
                 @* THIS IS FOR THE COMMENT AUTHOR *@
@@ -238,7 +259,7 @@ else
                             </div>
                             <div class="col">
                                 @* SweetAlert Window *@
-                                <a asp-action="Delete" asp-controller="Comments" asp-route-id="@comment.Id" class="btn btn-dark btn-outline-light btn-sm w-100">DELETE</a>
+                                <button class="btnSwal btn btn-dark btn-outline-danger btn-sm w-100" data-commentId=@comment.Id>DELETE</button>
                             </div>
                         </div>
                     </div>
@@ -248,9 +269,9 @@ else
                 @if (User.IsInRole("Moderator"))
                 {
                     <div class="footer">
-                        <div class="row row-cols-1 row-cols-md-2 g-2">
+                        <div class="row row-cols-1 g-2">
                             <div class="col">
-                                <button class="btn btn-dark btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#moderateCommentModal">EDIT</button>
+                                <button class="btnModModal btn btn-dark btn-outline-danger btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#moderateCommentModal">MODERATE</button>
                             </div>
                             @*<div class="col">
                                 SweetAlert Window
@@ -303,32 +324,53 @@ else
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel2">Modal title</h5>
+                <h5 class="modal-title" id="staticBackdropLabel2">Moderating Comment</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form asp-action="Edit" asp-controller="Comments">
-                    <input hidden name="Id" id="modalCommentId" />
+
+                @*1. Display a read-only version of the original body
+                    2. A text area for collecting the Moderated Body
+                    3. Select List of Mod Reasons
+                *@
+                <form asp-action="Moderate" asp-controller="Comments">
+                    <input type="hidden" name="Id" id="modalModerateCommentId" />
+
                     <div class="form-group">
-                        <textarea name="CommentBody" id="modalCommentBody"></textarea>
+                        <label class="control-label">Original Body</label>
+                        <textarea id="modalModerateCommentBody" rows=5 class="form-control" readonly></textarea>
                     </div>
+
                     <div class="form-group">
-                        <button class="btn btn-sm btn-warning btn-outline-dark w-100 fw-bold">EDIT</button>
+                        <label class="control-label">Moderated Body</label>
+                        <textarea name="ModeratedBody" rows=5 class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Moderation Reason</label>
+                        <select class="form-control" name="ModerationReason" asp-items="@Html.GetEnumSelectList<ModerationReason>()"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-sm btn-warning btn-outline-dark w-100 fw-bold">SAVE</button>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Understood</button>
             </div>
         </div>
     </div>
 </div>
 
+<form name="frmDeleteComment" asp-action="Delete" asp-controller="Comments">
+    <input type="hidden" name="Id" id="deleteCommentId" />
+</form>
 
 @section Scripts {
 
 
+<!-- Edit Modal -->
 <script>
     //Event handler for modal edit button
     document.querySelectorAll("button.btnModal").forEach(btn => {
@@ -344,7 +386,55 @@ else
 
         });
     });
-
-
 </script>
+
+<!-- Mod Modal -->
+<script>
+    document.querySelectorAll("button.btnModModal").forEach(btn => {
+       btn.addEventListener("click", function(){
+
+           //Thing 1: Get the Id of the comment into the Modal
+           document.getElementById('modalModerateCommentId').value = this.getAttribute('data-commentId');
+           //Thing 2: Get the original CommentBody into the read only textarea of the modal
+           let parent = this.closest("div.targetParent");
+           let child = parent.querySelector("div.targetChild p");
+           document.getElementById('modalModerateCommentBody').innerText = child.innerText;
+       });
+    });
+</script>
+
+<!-- Delete SweetAlert -->
+<script>
+    document.querySelectorAll("button.btnSwal").forEach(btn => {
+        btn.addEventListener("click", function(){
+            document.getElementById("deleteCommentId").value = this.getAttribute('data-CommentId');
+            DeleteComment();
+        });
+    });
+    function DeleteComment(){
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: 'Your comment has been deleted.',
+                    icon: 'success',
+                    showConfirmButton: false
+                })
+                setTimeout(function(){
+                    document.frmDeleteComment.submit();
+                }, 3000);
+
+                }
+            })
+    }
+</script>
+
 }

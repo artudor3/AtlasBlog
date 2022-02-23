@@ -148,6 +148,7 @@ namespace AtlasBlog.Controllers
 
 
         // GET: BlogPosts/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -253,6 +254,7 @@ namespace AtlasBlog.Controllers
 
 
         // GET: BlogPosts/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

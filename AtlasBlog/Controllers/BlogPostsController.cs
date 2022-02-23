@@ -36,7 +36,7 @@ namespace AtlasBlog.Controllers
         {
             var children = await _context.BlogPosts.Include(b => b.Blog)
                                              .Where(b => b.BlogId == blogId)
-                                             .ToListAsync();
+                                             .ToPagedListAsync(1,6);
             return View("Index", children);
         }
 

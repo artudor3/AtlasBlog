@@ -4,8 +4,9 @@
 
 @using AtlasBlog.Models
 @using X.PagedList.Web.Common
-@model IPagedList<AtlasBlog.Models.Blog>
-@*@model IEnumerable<AtlasBlog.Models.Blog>*@
+
+@*@model IPagedList<AtlasBlog.Models.Blog>*@
+@model IEnumerable<AtlasBlog.Models.Blog>
 
 @inject IImageService _imageService
 
@@ -54,7 +55,7 @@
 
         <hr />
         <h3>Recent Posts</h3>
-        @*<div class="row row-cols-1 row-cols-md-3 g-2">
+        <div class="row row-cols-1 row-cols-md-3 g-2">
             @foreach (var blogPost in Model.SelectMany(b => b.BlogPosts).OrderByDescending(b => b.Updated).Take(3))
             {
                 <div class="col">
@@ -71,7 +72,7 @@
                     </div>
                 </div>
             }
-        </div>*@
+        </div>
         <hr />
 
         <h3>Blogs</h3>

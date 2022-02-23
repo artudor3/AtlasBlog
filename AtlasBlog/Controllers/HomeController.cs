@@ -19,13 +19,13 @@ namespace AtlasBlog.Controllers
 
         public async Task<IActionResult> Index(int? pageNum)
         {
-            pageNum = pageNum ?? 1;
+            //pageNum = pageNum ?? 1;
             pageNum ??= 1;
 
-            //var blogs = await _context.Blogs.OrderByDescending(b => b.Created).ToListAsync();
+            var blogs = await _context.Blogs.OrderByDescending(b => b.Created).ToListAsync();
             //var blogs = _context.Blogs.ToPagedList((int)pageNum, 5);
-            var blogs = await _context.Blogs.OrderByDescending(b => b.Created)
-                                            .ToPagedListAsync(pageNum, 5);
+            //var blogs = await _context.Blogs.OrderByDescending(b => b.Created)
+            //                                .ToPagedListAsync(pageNum, 5);
             return View(blogs);
         }
 

@@ -38,7 +38,7 @@
                 <td>
                     @if (item.ImageType != "")
                     {
-                        <img class="img-fluid" src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)">
+                        <img class="img-fluid" style="width:200px;height:auto" src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)">
                     }
                 </td>
                 <td>

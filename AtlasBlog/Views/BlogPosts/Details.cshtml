@@ -86,7 +86,7 @@
                 <div class="card-header bg-dark text-light">Search</div>
                 <div class="card-body">
                     <div class="input-group">
-                        <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                        <input class="form-control" disabled type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
                         <button class="btn btn-primary" id="button-search" type="button">Go!</button>
                     </div>
                 </div>
@@ -144,18 +144,6 @@
             @Html.DisplayFor(model => model.Title)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Slug)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Slug)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Abstract)
         </dt>
         <dd class="col-sm-10">
@@ -172,12 +160,6 @@
         </dt>
         <dd class="col-sm-10">
             @Html.Raw(Model!.Body)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Created)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Updated)
@@ -430,7 +412,7 @@ else
                 })
                 setTimeout(function(){
                     document.frmDeleteComment.submit();
-                }, 3000);
+                }, 900);
 
                 }
             })

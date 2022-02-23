@@ -43,13 +43,14 @@ namespace AtlasBlog.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.BlogPosts.Include(b => b.Blog);
-            return View(await applicationDbContext.ToListAsync());
+            var pagedPosts = await applicationDbContext.ToPagedListAsync(1, 6);
+            return View(pagedPosts);
         }
 
         public async Task<IActionResult> SearchIndex(int? pageNum, string searchTerm)
         {
             pageNum ??= 1;
-            var pageSize = 5;
+            var pageSize = 6;
 
             //Search Service goes here
             var postResults = _searchService.TermSearch(searchTerm);

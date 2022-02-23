@@ -13,7 +13,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Created" />
@@ -32,11 +32,11 @@
                 @if (Model.ImageType != "")
                 {
                     <img class="img-fluid img-thumbnail" style="width:100px;height:80px" src="@_imageService.ConvertByteArrayToFile(Model.ImageData, Model.ImageType)">
-                }
+                }@*
                 else
                 {
                     <img class="img-fluid img-thumbnail" style="width:100px;height:100px" src="https://cdn.icon-icons.com/icons2/46/PNG/128/imgindex_9614.png">
-                }
+                }*@
                 <label asp-for="ImageData" class="control-label"></label>
                 <input type="file" name="ImageFile" class="form-control" />
             </div>

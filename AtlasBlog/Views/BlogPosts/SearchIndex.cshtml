@@ -1,5 +1,7 @@
 ﻿@using AtlasBlog.Services.Interfaces
 @using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
 
 @inject IImageService _imageService
 
@@ -11,7 +13,7 @@
     {
         <div class="col">
             <div class="card h-100">
-                <img src="..." class="card-img-top" alt="...">
+                <img src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">@blogPost.Title</h5>
                     <p class="card-text h6">@blogPost.Abstract</p>
@@ -28,7 +30,18 @@
 <hr />
 
 <div class="row">
-    <div class="col">
+    <div class="col h3">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </div>
+</div>
 
+<div class="row">
+    <div class="col">
+        @Html.PagedListPager(Model, pageNum => Url.Action("SearchIndex", new { pageNum, searchTerm = ViewBag.SearchTerm }),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })
     </div>
 </div>

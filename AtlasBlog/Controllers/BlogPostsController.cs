@@ -43,7 +43,7 @@ namespace AtlasBlog.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.BlogPosts.Include(b => b.Blog);
-            var pagedPosts = await applicationDbContext.ToPagedListAsync(1, 6);
+            var pagedPosts = await applicationDbContext.ToPagedListAsync(1,6);
             return View(pagedPosts);
         }
 

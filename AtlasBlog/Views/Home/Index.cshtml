@@ -5,6 +5,7 @@
 @using AtlasBlog.Models
 @using X.PagedList.Web.Common
 @model IPagedList<AtlasBlog.Models.Blog>
+@*@model IEnumerable<AtlasBlog.Models.Blog>*@
 
 @inject IImageService _imageService
 
@@ -53,12 +54,30 @@
 
         <hr />
         <h3>Recent Posts</h3>
+        @*<div class="row row-cols-1 row-cols-md-3 g-2">
+            @foreach (var blogPost in Model.SelectMany(b => b.BlogPosts).OrderByDescending(b => b.Updated).Take(3))
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">@blogPost.Title</h5>
+                            <p class="card-text h6">@blogPost.Abstract</p>
+                            <h6 class="card-title text-muted fst-italic">Created: @blogPost.Created.ToString("MMM dd, yyyy")</h6>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="Details" asp-controller="BlogPosts" class="btn btn-sm btn-dark btn-outline-secondary w-100">Read Blog Post</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>*@
         <hr />
 
         <h3>Blogs</h3>
         <!-- Nested row for non-featured blog posts-->
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-            @foreach (var blog in Model)
+            @foreach (var blog in Model.OrderByDescending(b => b.Updated))
             {
                 <div class="col">
                     <!-- Blog post-->
@@ -70,7 +89,7 @@
                             }
                             else
                             {
-                            <img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." />
+                                <img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." />
                             }
                         </a>
                         <div class="card-body">
@@ -101,12 +120,12 @@
         <hr />
         <div class="row">
             <div class="col h3">
-                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                Page (Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of Model.PageCount
             </div>
         </div>
         <div class="row">
             <div class="col">
-        @Html.PagedListPager(Model, pageNum => Url.Action("Index", new { pageNum }),
+        Html.PagedListPager(Model, pageNum => Url.Action("Index", new { pageNum }),
                 new PagedListRenderOptions
                 {
                 LiElementClasses = new string[] { "page-item" },

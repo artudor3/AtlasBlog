@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AtlasBlog.Controllers
 {
+
+    [Authorize(Roles = "Administrator")]
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,9 +26,34 @@ namespace AtlasBlog.Controllers
             _userManager = userManager;
         }
 
+        // GET: Comments
+        public async Task<IActionResult> Index()
+        {
+            var applicationDbContext = _context.Comments.Include(c => c.Author).Include(c => c.BlogPost);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        // GET: Comments/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var comment = await _context.Comments
+                .Include(c => c.Author)
+                .Include(c => c.BlogPost)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            return View(comment);
+        }
+
         // POST: Comments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BlogPostId,CommentBody")] Comment comment, string slug)
@@ -35,12 +62,12 @@ namespace AtlasBlog.Controllers
             {
                 comment.AuthorId = _userManager.GetUserId(User);
                 comment.CreatedDate = DateTime.UtcNow;
-                
+
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Details","BlogPosts",new { slug },"CommentSection");
+            return RedirectToAction("Details", "BlogPosts", new { slug }, "CommentSection");
         }
 
         // POST: Comments/Edit
@@ -80,12 +107,9 @@ namespace AtlasBlog.Controllers
                 return RedirectToAction("Details", "BlogPosts", new { slug }, "CommentSection");
             }
 
-
-            //ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            //ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Abstract", comment.BlogPostId);
             return View(comment);
         }
-                
+
         // POST: Comments/Moderate
         [HttpPost]
         [ValidateAntiForgeryToken]

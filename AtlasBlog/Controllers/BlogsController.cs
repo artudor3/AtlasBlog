@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AtlasBlog.Controllers
 {
+
+    [Authorize(Roles = "Administrator")]
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -55,7 +57,6 @@ namespace AtlasBlog.Controllers
 
 
         // GET: Blogs/Create
-        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -90,7 +91,6 @@ namespace AtlasBlog.Controllers
 
 
         // GET: Blogs/Edit/5
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -151,7 +151,6 @@ namespace AtlasBlog.Controllers
 
 
         // GET: Blogs/Delete/5
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

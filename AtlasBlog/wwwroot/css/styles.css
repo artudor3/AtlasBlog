@@ -62,9 +62,111 @@
     --bs-body-line-height: 1.5;
     --bs-body-color: #212529;
     --bs-body-bg: #fff;
+
+
     --at-dark-color: #212121;
     --at-light-color: #eeeeee;
+    --at-color2: #012152;
 }
+
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------*/
+
+.c2 {
+    background-color: var(--at-color2);
+}
+
+.tagSm {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    background-color: var(--at-color2);
+}
+.tagLg {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    margin: 0.25em;
+    font-size: 1em;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    background-color: var(--at-color2);
+}
+
+
+
+.btn-custom {
+    color: #fff;
+    background-color: #212529;
+    border-color: #212529;
+}
+
+    .btn-custom:hover {
+        color: #fff;
+        background-color: #1c1f23;
+        border-color: #1a1e21;
+    }
+
+    .btn-check:focus + .btn-custom, .btn-custom:focus {
+        color: #fff;
+        background-color: #1c1f23;
+        border-color: #1a1e21;
+        box-shadow: 0 0 0 0.25rem rgba(66, 70, 73, 0.5);
+    }
+
+    .btn-check:checked + .btn-custom, .btn-check:active + .btn-custom, .btn-custom:active, .btn-custom.active, .show > .btn-custom.dropdown-toggle {
+        color: #fff;
+        background-color: #1a1e21;
+        border-color: #191c1f;
+    }
+
+        .btn-check:checked + .btn-custom:focus, .btn-check:active + .btn-custom:focus, .btn-custom:active:focus, .btn-custom.active:focus, .show > .btn-custom.dropdown-toggle:focus {
+            box-shadow: 0 0 0 0.25rem rgba(66, 70, 73, 0.5);
+        }
+
+    .btn-custom:disabled, .btn-custom.disabled {
+        color: #fff;
+        background-color: #212529;
+        border-color: #212529;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------*/
+
+
 
 
 
@@ -257,12 +359,13 @@ sup {
 }
 
 a {
-  color: #0d6efd;
-  text-decoration: underline;
+    color: #012152;
+    text-decoration: none;
 }
-a:hover {
-  color: #0a58ca;
-}
+    a:hover {
+        color: #0a58ca;
+        text-decoration: underline;
+    }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
   color: inherit;
@@ -3051,9 +3154,11 @@ textarea.form-control-lg {
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #0d6efd;
-  border-color: #0d6efd;
+    color: #fff;
+    /*background-color: #0d6efd;*/
+    background-color: #012152;
+        [Authorize(Roles = "Administrator")]
+    border-color: #0d6efd;
 }
 .btn-primary:hover {
   color: #fff;
@@ -4906,16 +5011,16 @@ textarea.form-control-lg {
 }
 
 .badge {
-  display: inline-block;
-  padding: 0.35em 0.65em;
-  font-size: 0.75em;
-  font-weight: 700;
-  line-height: 1;
-  color: #fff;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: 0.25rem;
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
 }
 .badge:empty {
   display: none;

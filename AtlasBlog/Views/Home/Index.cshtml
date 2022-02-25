@@ -173,6 +173,8 @@
             </div>
         </div>
         <!-- Side widget-->
+        @if (User.IsInRole("Administrator"))
+        {
         <div class="card mb-4">
             <div class="card-header bg-dark text-light">Shortcuts - (make visible to only Admin)</div>
             <div class="card-body">
@@ -182,5 +184,6 @@
                 </ul>
             </div>
         </div>
+        }
     </div>
 </div>

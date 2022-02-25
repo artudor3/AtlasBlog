@@ -19,21 +19,21 @@
                     <!-- Post title-->
                     <h1 class="fw-bolder mb-1">@Html.DisplayFor(model => model.Title)</h1>
                     <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-2">Posted on @Model!.Created.ToString("MMMM dd, yyyy") by Start Bootstrap</div>
+                    <div class="text-muted fst-italic mb-2">Posted on @Model!.Created.ToString("MMMM dd, yyyy") by Andrew Tudor</div>
                     <!-- Post categories-->
-                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
-                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
+                    <a class="tagSm text-decoration-none link-light" href="#!">Web Design</a> 
+                    <a class="tagSm text-decoration-none link-light" href="#!">Freebies</a>
                 </header>
                 <!-- Preview image figure-->
                 <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
                 <!-- Post content-->
                 <section class="mb-5">
-                    <p class="fs-5 mb-4">Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.</p>
-                    <p class="fs-5 mb-4">The universe is large and old, and the ingredients for life as we know it are everywhere, so there's no reason to think that Earth would be unique in that regard. Whether of not the life became intelligent is a different question, and we'll see if we find that.</p>
-                    <p class="fs-5 mb-4">If you get asteroids about a kilometer in size, those are large enough and carry enough energy into our system to disrupt transportation, communication, the food chains, and that can be a really bad day on Earth.</p>
-                    <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
-                    <p class="fs-5 mb-4">For me, the most fascinating interface is Twitter. I have odd cosmic thoughts every day and I realized I could hold them to myself or share them with people who might be interested.</p>
-                    <p class="fs-5 mb-4">Venus has a runaway greenhouse effect. I kind of want to know what happened there because we're twirling knobs here on Earth without knowing the consequences of it. Mars once had running water. It's bone dry today. Something bad happened there as well.</p>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+                    } |
+                    <a asp-action="Index">Back to List</a>
+                    @Html.Raw(Model!.Body)
                 </section>
             </article>
             <!-- Comments section-->
@@ -41,15 +41,31 @@
                 <div class="card bg-light">
                     <div class="card-body">
                         <!-- Comment form-->
-                        <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
-                        <!-- Comment with nested comments-->
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            //Present a simple form for collecting the comment
+                            <form asp-controller="Comments" asp-action="Create" class="mb-4">
+                                <input type="hidden" asp-for="Slug">
+                                <input type="hidden" name="BlogPostId" value=@Model!.Id>
+
+                                <textarea class="form-control" name="CommentBody" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                <button class="btn btn-dark btn-outline-light my-2">SUBMIT</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a class="nav-link fw-bold" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details","BlogPosts", new {slug = Model.Slug})">Login to add a comment</a>
+                            <hr />
+                        }
+
+                        <!-- Comment with nested comments
                         <div class="d-flex mb-4">
-                            <!-- Parent comment-->
+                            <!-- Parent comment
                             <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                             <div class="ms-3">
                                 <div class="fw-bold">Commenter Name</div>
                                 If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                                <!-- Child comment 1-->
+                                Child comment 1
                                 <div class="d-flex mt-4">
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                                     <div class="ms-3">
@@ -57,7 +73,7 @@
                                         And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
                                     </div>
                                 </div>
-                                <!-- Child comment 2-->
+                                 Child comment 2
                                 <div class="d-flex mt-4">
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                                     <div class="ms-3">
@@ -66,19 +82,69 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Single comment-->
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                            <div class="ms-3">
-                                <div class="fw-bold">Commenter Name</div>
-                                When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
-                            </div>
+                        </div>-->
+
+                        <div id="CommentSection">
+                            @foreach (var comment in Model!.Comments.OrderByDescending(c => c.UpdatedDate))
+                            {
+                                <hr />
+                                <div class="d-flex my-3">
+                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                    <div class="ms-3 w-100">
+                                        <div>
+                                            <span class="fw-bold">@comment.Author!.FullName</span>
+
+
+                                            @if (comment.ModeratedDate is null)
+                                            {
+                                                <span class="float-end">
+                                                    Created: @comment.CreatedDate.ToString("MMM dd, yyyy")
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="float-end text-danger fst-italic">
+                                                    Moderated on: @comment.ModeratedDate?.ToString("MMM dd, yyyy")
+                                                </span>
+                                            }
+                                        </div>
+
+                                        <div class="targetChild">
+
+                                            @if (comment.ModeratedDate is null)
+                                            {
+                                                <div>
+                                                    <span>@comment.CommentBody</span>
+                                                    @if (comment.ModeratedDate is null && comment.AuthorId == _userManager.GetUserId(User))
+                                                    {
+                                                    <span class="float-end">
+                                                        <button class="btnModal btn" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#editCommentModal"><i class="fa-solid text-primary fa-pen-to-square"></i></button>
+                                                        <button class="btnSwal btn" data-commentId=@comment.Id><i class="fa-solid text-danger fa-trash-can"></i></button>
+                                                    </span>                                                       
+                                                    }
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <h6 class="text-danger fst-italic">Moderation Reason: @comment.ModerationReason</h6>
+                                                <h5 class="card-title">@comment.ModeratedBody <span class="fst-italic text-muted ms-2">(modified...)</span></h5>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
                         </div>
                     </div>
-                </div>
             </section>
         </div>
+
+
+
+
+
         <!-- Side widgets-->
         <div class="col-lg-4">
             <!-- Search widget-->
@@ -98,16 +164,16 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <ul class="list-unstyled mb-0">
-                                <li><a href="#!">Web Design</a></li>
-                                <li><a href="#!">HTML</a></li>
-                                <li><a href="#!">Freebies</a></li>
+                                <li><a class="tagLg text-decoration-none link-light" href="#!">Web Design</a></li>
+                                <li><a class="tagLg text-decoration-none link-light" href="#!">HTML</a></li>
+                                <li><a class="tagLg text-decoration-none link-light" href="#!">Freebies</a></li>
                             </ul>
                         </div>
                         <div class="col-sm-6">
                             <ul class="list-unstyled mb-0">
-                                <li><a href="#!">JavaScript</a></li>
-                                <li><a href="#!">CSS</a></li>
-                                <li><a href="#!">Tutorials</a></li>
+                                <li><a class="tagLg text-decoration-none link-light" href="#!">JavaScript</a></li>
+                                <li><a class="tagLg text-decoration-none link-light" href="#!">CSS</a></li>
+                                <li><a class="tagLg  text-decoration-none link-light" href="#!">Tutorials</a></li>
                             </ul>
                         </div>
                     </div>
@@ -124,150 +190,95 @@
 
 
 
-<h1>Details</h1>
-
-<div>
-    <h4>BlogPost</h4>
-    <div>
-        @if (User.IsInRole("Administrator"))
-        {
-            <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
-        } |
-        <a asp-action="Index">Back to List</a>
-    </div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Abstract)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Abstract)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BlogPostState)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BlogPostState)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Body)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.Raw(Model!.Body)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Blog)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Blog.BlogName)
-        </dd>
-    </dl>
-</div>
-
-<h4>Comments</h4>
-@if (User.Identity!.IsAuthenticated)
-{
+@*
+    <h4>Comments</h4>
+    @if (User.Identity!.IsAuthenticated)
+    {
     //Present a simple form for collecting the comment
     <form asp-controller="Comments" asp-action="Create">
-        <input type="hidden" asp-for="Slug">
-        <input type="hidden" name="BlogPostId" value=@Model!.Id>
+    <input type="hidden" asp-for="Slug">
+    <input type="hidden" name="BlogPostId" value=@Model!.Id>
 
-        <textarea class="form-control" name="CommentBody" rows=10 placeholder="Add Comment"></textarea>
-        <button class="btn btn-dark btn-outline-light my-2">SUBMIT</button>
+    <textarea class="form-control" name="CommentBody" rows=10 placeholder="Add Comment"></textarea>
+    <button class="btn btn-dark btn-outline-light my-2">SUBMIT</button>
     </form>
-}
-else
-{
+    }
+    else
+    {
     <a class="nav-link fw-bold" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details","BlogPosts", new {slug = Model.Slug})">Login to add a comment</a>
-}
+    }*@
+@*
+    <hr />
 
-<hr />
-
-<div class="row" id="CommentSection">
+    <div class="row" id="CommentSection">
     @foreach (var comment in Model!.Comments.OrderByDescending(c => c.UpdatedDate))
     {
-        <div class="col-12">
-            <div class="targetParent card text-white bg-dark p-1 mb-3 w-100">
+    <div class="col-12">
+    <div class="targetParent card text-white bg-dark p-1 mb-3 w-100">
 
-                <div class="card-header border-light">
-                    <span class="float-start">
-                        @comment.Author!.FullName - @comment.Author
-                    </span>
-                    @if (comment.ModeratedDate is null)
-                    {
-                        <span class="float-end">
-                            Created: @comment.CreatedDate.ToString("MMM dd, yyyy")
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="float-end text-danger fst-italic">
-                            Moderated on: @comment.ModeratedDate?.ToString("MMM dd, yyyy")
-                        </span>
-                    }
-                </div>
-
-                <div class="targetChild card-body">
-                    @if (comment.ModeratedDate is null)
-                    {
-                        <p class="card-text">@comment.CommentBody</p>
-                    }
-                    else
-                    {
-                        <h6 class="text-danger fst-italic">Moderation Reason: @comment.ModerationReason</h6>
-                        <h5 class="card-title">@comment.ModeratedBody <span class="fst-italic text-muted ms-2">(modified...)</span></h5>
-                    }
-                </div>
-
-                @* THIS IS FOR THE COMMENT AUTHOR *@
-                @if (comment.ModeratedDate is null && comment.AuthorId == _userManager.GetUserId(User))
-                {
-                    <div class="footer ps-3">
-                        <div class="row row-cols-1 row-cols-md-2 g-2">
-                            <div class="col">
-                                <button class="btnModal btn btn-dark btn-outline-light btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#editCommentModal">EDIT</button>
-                            </div>
-                            <div class="col">
-                                @* SweetAlert Window *@
-                                <button class="btnSwal btn btn-dark btn-outline-danger btn-sm w-100" data-commentId=@comment.Id>DELETE</button>
-                            </div>
-                        </div>
-                    </div>
-                }
-
-                @* THIS IS FOR THE COMMENT MODERATOR *@
-                @if (User.IsInRole("Moderator"))
-                {
-                    <div class="footer">
-                        <div class="row row-cols-1 g-2">
-                            <div class="col">
-                                <button class="btnModModal btn btn-dark btn-outline-danger btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#moderateCommentModal">MODERATE</button>
-                            </div>
-                            @*<div class="col">
-                                SweetAlert Window
-                                <a asp-action="Delete" asp-controller="Comments" asp-route-id="@comment.Id" class="btn btn-dark w-100">Delete</a>
-                                </div>*@
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
+    <div class="card-header border-light">
+    <span class="float-start">
+    @comment.Author!.FullName - @comment.Author
+    </span>
+    @if (comment.ModeratedDate is null)
+    {
+    <span class="float-end">
+    Created: @comment.CreatedDate.ToString("MMM dd, yyyy")
+    </span>
     }
-</div>
+    else
+    {
+    <span class="float-end text-danger fst-italic">
+    Moderated on: @comment.ModeratedDate?.ToString("MMM dd, yyyy")
+    </span>
+    }
+    </div>
 
+    <div class="targetChild card-body">
+    @if (comment.ModeratedDate is null)
+    {
+    <p class="card-text">@comment.CommentBody</p>
+    }
+    else
+    {
+    <h6 class="text-danger fst-italic">Moderation Reason: @comment.ModerationReason</h6>
+    <h5 class="card-title">@comment.ModeratedBody <span class="fst-italic text-muted ms-2">(modified...)</span></h5>
+    }
+    </div>*@
 
+@* THIS IS FOR THE COMMENT AUTHOR
+    @if (comment.ModeratedDate is null && comment.AuthorId == _userManager.GetUserId(User))
+    {
+    <div class="footer ps-3">
+    <div class="row row-cols-1 row-cols-md-2 g-2">
+    <div class="col">
+    <button class="btnModal btn btn-dark btn-outline-light btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#editCommentModal">EDIT</button>
+    </div>
+    <div class="col">
+    @* SweetAlert Window
+    <button class="btnSwal btn btn-dark btn-outline-danger btn-sm w-100" data-commentId=@comment.Id>DELETE</button>
+    </div>
+    </div>
+    </div>
+    }*@
+
+@* THIS IS FOR THE COMMENT MODERATOR
+    @if (User.IsInRole("Moderator"))
+    {
+    <div class="footer">
+    <div class="row row-cols-1 g-2">
+    <div class="col">
+    <button class="btnModModal btn btn-dark btn-outline-danger btn-sm w-100" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#moderateCommentModal">MODERATE</button>
+    </div>
+    </div>
+    </div>
+    }
+    </div>
+    </div>
+    }
+    </div>
+
+*@
 
 @* ------ MODAL SECTION ------ *@
 

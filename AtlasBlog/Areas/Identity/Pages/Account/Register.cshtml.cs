@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using AtlasBlog.Services.Interfaces;
+using Microsoft.Extensions.FileProviders;
 
 namespace AtlasBlog.Areas.Identity.Pages.Account
 {
@@ -30,13 +32,15 @@ namespace AtlasBlog.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<BlogUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IImageService _imageService;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
         public RegisterModel(
             UserManager<BlogUser> userManager,
             IUserStore<BlogUser> userStore,
             SignInManager<BlogUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IImageService imageService, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +48,8 @@ namespace AtlasBlog.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _imageService = imageService;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -114,6 +120,10 @@ namespace AtlasBlog.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
 
+            [DataType(DataType.Upload)]
+            [Display(Name = "User Image")]
+            public IFormFile ImageFile { get; set; }
+
 
         }
 
@@ -134,6 +144,22 @@ namespace AtlasBlog.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.DisplayName = Input.DisplayName;
+
+                if (Input.ImageFile is null)
+                {
+                    // Only works on local
+                    FileInfo fi = new("~img/defaultContactImage.jpg");
+                    byte[] imgData = System.IO.File.ReadAllBytes("C:/Users/artud/Documents/Code/CodeAtlas/C# MVC/AtlasBlog/AtlasBlog/wwwroot/img/defaultContactImage.jpg");
+                    user.ImageData = imgData;
+                    user.ImageType = fi.Extension;
+
+                }
+                else
+                {
+                    user.ImageData = await _imageService.ConvertFileToByteArrayAsync(user.ImageFile);
+                    user.ImageType = user.ImageFile.ContentType;
+                }
+
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

@@ -30,7 +30,7 @@ namespace AtlasBlog.Models
 
         [NotMapped]
         [DataType(DataType.Upload)]
-        [Display(Name = "Blog Image")]
+        [Display(Name = "User Image")]
         public IFormFile? ImageFile { get; set; }
         public byte[]? ImageData { get; set; }
         public string? ImageType { get; set; }

@@ -12,27 +12,31 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-lg-8">
-            <!-- Post content-->
+            <!-- Post content--> 
             <article>
                 <!-- Post header-->
                 <header class="mb-4">
                     <!-- Post title-->
                     <h1 class="fw-bolder mb-1">@Html.DisplayFor(model => model.Title)</h1>
                     <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-2">Posted on @Model!.Created.ToString("MMMM dd, yyyy") by Andrew Tudor</div>
+                    <div class="text-muted fst-italic mb-2">
+                        Posted on @Model!.Created.ToString("MMMM dd, yyyy") by Andrew Tudor
+                    </div>
                     <!-- Post categories-->
-                    <a class="tagSm text-decoration-none link-light" href="#!">Web Design</a> 
+                    <a class="tagSm text-decoration-none link-light" href="#!">Web Design</a>
                     <a class="tagSm text-decoration-none link-light" href="#!">Freebies</a>
+                    <span class="float-end">
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+                        } |
+                        <a asp-action="Index">Back to List</a>
+                    </span>
                 </header>
                 <!-- Preview image figure-->
                 <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
                 <!-- Post content-->
                 <section class="mb-5">
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
-                    } |
-                    <a asp-action="Index">Back to List</a>
                     @Html.Raw(Model!.Body)
                 </section>
             </article>
@@ -83,7 +87,6 @@
                                 </div>
                             </div>
                         </div>-->
-
                         <div id="CommentSection">
                             @foreach (var comment in Model!.Comments.OrderByDescending(c => c.UpdatedDate))
                             {
@@ -117,10 +120,10 @@
                                                     <span>@comment.CommentBody</span>
                                                     @if (comment.ModeratedDate is null && comment.AuthorId == _userManager.GetUserId(User))
                                                     {
-                                                    <span class="float-end">
-                                                        <button class="btnModal btn" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#editCommentModal"><i class="fa-solid text-primary fa-pen-to-square"></i></button>
-                                                        <button class="btnSwal btn" data-commentId=@comment.Id><i class="fa-solid text-danger fa-trash-can"></i></button>
-                                                    </span>                                                       
+                                                        <span class="float-end">
+                                                            <button class="btnModal btn" data-commentId=@comment.Id data-bs-toggle="modal" data-bs-target="#editCommentModal"><i class="fa-solid text-primary fa-pen-to-square"></i></button>
+                                                            <button class="btnSwal btn" data-commentId=@comment.Id><i class="fa-solid text-danger fa-trash-can"></i></button>
+                                                        </span>
                                                     }
                                                 </div>
                                             }
@@ -134,10 +137,9 @@
                                     </div>
                                 </div>
                             }
-
-
                         </div>
                     </div>
+                </div>
             </section>
         </div>
 
@@ -301,8 +303,8 @@
                     </div>
 
                     <div class="form-group float-end">
-                        <button type="button" class="btn btn-sm btn-dark btn-outline-light fw-bold">SAVE</button>
-                        <button type="button" class="btn btn-sm btn-dark btn-outline-light fw-bold" data-bs-dismiss="modal">CANCEL</button>
+                        <button type="button" class="btn btn-sm btn-dark btn-outline-light fw-bold">Save Changes</button>
+                        <button type="button" class="btn btn-sm btn-dark btn-outline-light fw-bold" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>

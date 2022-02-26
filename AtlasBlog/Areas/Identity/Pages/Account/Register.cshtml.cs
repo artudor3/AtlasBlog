@@ -148,10 +148,10 @@ namespace AtlasBlog.Areas.Identity.Pages.Account
                 if (Input.ImageFile is null)
                 {
                     // Only works on local
-                    FileInfo fi = new("~img/defaultContactImage.jpg");
-                    byte[] imgData = System.IO.File.ReadAllBytes("C:/Users/artud/Documents/Code/CodeAtlas/C# MVC/AtlasBlog/AtlasBlog/wwwroot/img/defaultContactImage.jpg");
-                    user.ImageData = imgData;
-                    user.ImageType = fi.Extension;
+                    //FileInfo fi = new("~img/defaultContactImage.jpg");
+                    //byte[] imgData = System.IO.File.ReadAllBytes("C:/Users/artud/Documents/Code/CodeAtlas/C# MVC/AtlasBlog/AtlasBlog/wwwroot/img/defaultContactImage.jpg");
+                    //user.ImageData = imgData;
+                    //user.ImageType = fi.Extension;
 
                 }
                 else

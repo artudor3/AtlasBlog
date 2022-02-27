@@ -15,11 +15,11 @@
         <div class="d-flex justify-content-center mt-4">
             @if (Model.Input.ImageData is not null)
             {
-                <img src="@_imageService.ConvertByteArrayToFile(Model.Input.ImageData, Model.Input.ImageType!)" style="width:200px;height:200px" class="contactList-image" alt="...">
+                <img id="contactImage" src="@_imageService.ConvertByteArrayToFile(Model.Input.ImageData, Model.Input.ImageType!)" style="width:200px;height:200px" class="contactList-image" alt="...">
             }
             else
             {
-                <img id="contactImage" class="img-fluid img-thumbnail" style="width:200px;height:200px" src="~/img/defaultContactImage.jpg">
+                <img class="img-fluid img-thumbnail" style="width:200px;height:200px" src="~/img/defaultContactImage.jpg">
             }
         </div>
         <form id="profile-form" method="post" enctype="multipart/form-data">

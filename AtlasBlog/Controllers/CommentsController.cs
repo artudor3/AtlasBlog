@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace AtlasBlog.Controllers
 {
 
-    [Authorize(Roles = "Administrator")]
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,6 +26,7 @@ namespace AtlasBlog.Controllers
         }
 
         // GET: Comments
+        [Authorize(Roles = "Administrator, Moderator")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Comments.Include(c => c.Author).Include(c => c.BlogPost);
@@ -34,6 +34,7 @@ namespace AtlasBlog.Controllers
         }
 
         // GET: Comments/Details/5
+        [Authorize(Roles = "Administrator, Moderator")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

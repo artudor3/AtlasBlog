@@ -8,6 +8,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AtlasBlog.Data;
 using AtlasBlog.Models;
+using AtlasBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -19,14 +20,16 @@ namespace AtlasBlog.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<BlogUser> _userManager;
         private readonly SignInManager<BlogUser> _signInManager;
         private readonly ApplicationDbContext _context;
+        private readonly IImageService _imageService;
 
         public IndexModel(
             UserManager<BlogUser> userManager,
-            SignInManager<BlogUser> signInManager, ApplicationDbContext context)
+            SignInManager<BlogUser> signInManager, ApplicationDbContext context, IImageService imageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _imageService = imageService;
         }
 
         /// <summary>
@@ -69,20 +72,24 @@ namespace AtlasBlog.Areas.Identity.Pages.Account.Manage
             [DataType(DataType.Upload)]
             [Display(Name = "User Image")]
             public IFormFile ImageFile { get; set; }
+
         }
 
         private async Task LoadAsync(BlogUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var imageData = user.ImageData;
+            var imagetype = user.ImageType;
+
 
             Username = userName;
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-                ImageData = user.ImageData,
-                ImageType = user.ImageType
+                ImageData = imageData,
+                ImageType = imagetype
             };
         }
 
@@ -121,6 +128,15 @@ namespace AtlasBlog.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            if (Input.ImageFile is not null)
+            {
+                user.ImageData = await _imageService.ConvertFileToByteArrayAsync(Input.ImageFile);
+                user.ImageType = Input.ImageFile.ContentType;
+
+                _context.Update(user);
+                await _context.SaveChangesAsync();
             }
 
             await _signInManager.RefreshSignInAsync(user);

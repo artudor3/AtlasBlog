@@ -142,6 +142,7 @@ namespace AtlasBlog.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
+            ViewData["TagIds"] = new MultiSelectList(_context.Tags, "Id", "Text");
             return View(blogPost);
         }
 
@@ -157,6 +158,7 @@ namespace AtlasBlog.Controllers
             }
 
             //var blogPost = await _context.BlogPosts.FindAsync(id);
+            //                                        FindAsync does not work after .Include
             var blogPost = await _context.BlogPosts
                                          .Include("Tags")
                                          .FirstOrDefaultAsync(b => b.Id == id);
@@ -169,6 +171,7 @@ namespace AtlasBlog.Controllers
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
             ViewData["TagIds"] = new MultiSelectList(_context.Tags, "Id", "Text", tagIds);
+            //                                 All available tags,Value Passed,Display,Previously Selected
             return View(blogPost);
         }
 
@@ -209,9 +212,7 @@ namespace AtlasBlog.Controllers
                             return View(blogPost);
                         }
                     }
-
-                    //var currentTags = blogPost.Tags.ToList();
-
+                    
                     blogPost.Created = DateTime.SpecifyKind(blogPost.Created, DateTimeKind.Utc);
                     blogPost.Updated = DateTime.UtcNow;
 
@@ -233,6 +234,9 @@ namespace AtlasBlog.Controllers
                         }
                     }
 
+
+                    await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -245,7 +249,7 @@ namespace AtlasBlog.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { blogPost.Slug });
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "BlogName", blogPost.BlogId);
             return View(blogPost);

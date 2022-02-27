@@ -27,6 +27,11 @@ namespace AtlasBlog.Services
                                       bp.Title.ToLower().Contains(searchTerm) ||
                                       bp.Abstract.ToLower().Contains(searchTerm) ||
                                       bp.Body.ToLower().Contains(searchTerm) ||
+                                      bp.Blog!.BlogName.ToLower().Contains(searchTerm) ||
+                                      bp.Blog.BlogDescription.ToLower().Contains(searchTerm) ||
+                                      bp.Tags.Any(t => 
+                                            t.Text.ToLower().Contains(searchTerm) ||
+                                            t.Description.ToLower().Contains(searchTerm)) ||
                                       bp.Comments.Any(c =>
                                             c.CommentBody.ToLower().Contains(searchTerm) ||
                                             c.ModeratedBody!.ToLower().Contains(searchTerm) ||

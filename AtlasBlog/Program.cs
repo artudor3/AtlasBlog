@@ -32,6 +32,7 @@ builder.Services.AddTransient<SlugService>();
 builder.Services.AddTransient<SearchService>();
 builder.Services.AddTransient<IEmailSender, BasicEmailService>();
 
+
 var app = builder.Build();
 
 //When calling a service from this middleware we need an instance of IServiceScope

@@ -78,7 +78,7 @@
         <h3>Blogs</h3>
         <!-- Nested row for non-featured blog posts-->
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-            @foreach (var blog in Model.OrderByDescending(b => b.Created))
+            @foreach (var blog in Model.OrderByDescending(b => b.Updated))
             {
                 <div class="col">
                     <!-- Blog post-->

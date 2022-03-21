@@ -18,7 +18,7 @@ namespace AtlasBlog.Models
         [DataType(DataType.Date)] 
         public DateTime Created { get; set; }
 
-        public DateTime? Updated { get; set; }
+        public DateTime Updated { get; set; }
         //public Nullable<DateTime> DateUpdated { get; set; }
 
 

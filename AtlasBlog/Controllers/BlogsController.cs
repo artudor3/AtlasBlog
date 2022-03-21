@@ -73,6 +73,7 @@ namespace AtlasBlog.Controllers
             {
                 //Specify the DateTime Kind for the incoming Created Date
                 blog.Created = DateTime.UtcNow;
+                blog.Updated = DateTime.UtcNow;
 
                 if (imageFile is not null)
                 {

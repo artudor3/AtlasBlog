@@ -58,7 +58,7 @@ namespace AtlasBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Text,Description")] Tag tag)
+        public async Task<IActionResult> Create([Bind("Text,Description")] Tag tag)
         {
             if (ModelState.IsValid)
             {

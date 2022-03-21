@@ -136,6 +136,7 @@ namespace AtlasBlog.Controllers
 
 
                 blogPost.Created = DateTime.UtcNow;
+                blogPost.Updated = DateTime.UtcNow;
 
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();

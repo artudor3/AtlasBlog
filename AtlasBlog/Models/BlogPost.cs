@@ -5,15 +5,27 @@ namespace AtlasBlog.Models
 {
     public class BlogPost
     {
+        /// <summary>
+        /// Primary Key
+        /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        /// The Blog Foreign Key
+        /// </summary>
         [Display(Name = "Blog Id")]
         public int BlogId { get; set; }
 
+        /// <summary>
+        /// The Blog Title
+        /// </summary>
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at most {1} and at least {2} characters long", MinimumLength = 3)]
         public string Title { get; set; } = "";
 
+        /// <summary>
+        /// The Slug is derived from the Title and must be unique
+        /// </summary>
         public string Slug { get; set; } = "";
 
         [Display(Name = "Mark for deletion")]

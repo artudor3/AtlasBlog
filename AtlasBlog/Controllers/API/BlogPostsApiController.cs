@@ -22,8 +22,17 @@ namespace AtlasBlog.Controllers.API
         {
             _context = context;
         }
-
-        [HttpGet]
+        /// <summary>
+        /// Return the specified number of latest Posts
+        /// </summary>
+        /// <remarks>
+        /// I can add additional descriptive data here
+        /// </remarks>
+        /// <param name="num">integer count of records</param>
+        /// <returns>
+        /// Returns a list of Blog Posts
+        /// </returns>
+        [HttpGet("GetTopXPosts/{num:int}")]
         public async Task<ActionResult<IEnumerable<BlogPost>>> GetTopXPosts(int num)
         {
             //Return the top x latest production ready postsd
